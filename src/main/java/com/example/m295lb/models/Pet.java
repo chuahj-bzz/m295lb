@@ -43,7 +43,7 @@ public class Pet {
     @Column(name = "legs")
     private int legs;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_ownerID", nullable = false)
-    private Owner owner;
+ //   @ManyToOne
+ //   @JoinColumn(name = "owner_ownerID", nullable = false)
+ //   private Owner owner;
 }

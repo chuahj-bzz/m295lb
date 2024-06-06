@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import com.example.m295lb.models.Owner;
 
 @Component
-@Path("/api")
+@Path("/api/owner")
 public class OwnerController {
 
     Logger log = LoggerFactory.getLogger(OwnerController.class);
 
-    @Autowired
+  //  @Autowired
     private IOwnerRepository ownerRepository;
 
     // getting all owners

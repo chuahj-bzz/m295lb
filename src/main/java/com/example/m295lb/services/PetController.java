@@ -28,7 +28,7 @@ public class PetController {
 
     @Autowired
     private IPetRepository petRepository;
-    @Autowired
+ //   @Autowired
     private IOwnerRepository ownerRepository;
 
     // getting all pets
@@ -77,13 +77,13 @@ public class PetController {
 
     // Read records based on a boolean filter (isAlive)
     @GET
-    @Path("/isAlive/{isAlive}")
+    @Path("/isAlive")
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPetsByIsAlive(@PathParam("isAlive") boolean alive) {
-        List<Pet> pets = petRepository.findPetByAlive(alive);
+    public Response getPetsByIsAlive() {
+        List<Pet> pets = petRepository.findPetByAlive(true);
         if (pets.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No pets found with isAlive " + alive).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("No pets found that are alive").build();
         }
         return Response.ok().entity(pets).build();
     }

@@ -8,8 +8,4 @@ import java.util.List;
 
 @Repository
 public interface IOwnerRepository extends JpaRepository<Owner, Integer> {
-
-    List<Owner> findByActive(boolean active);
-
-    List<Owner> findByFirstname(String firstName);
 }

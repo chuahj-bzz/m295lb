@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -143,94 +144,6 @@ public class PetControllerTest {
         assertEquals(HttpStatus.SC_BAD_REQUEST, statusCode, "Expected status code is 400 but got " + statusCode);
     }
 
-    // negative get all pets when pets exist - has to fail if there are data entry
-    @Test
-    public void getAllPets_whenNoPetsExist_thenResponseCodeNotFound() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/getPets");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-    }
-
-
-    // negative get pet by id
-    @Test
-    public void givenWrongId_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/100");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-    }
-    // positive checks if pet exists
-    @Test
-    public void checkPetExist_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/exists/1");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-    // negative checks if pet exists
-    @Test
-    public void checkPetNotExist_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/exists/100");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-    }
-    // positive filter get all pets that are alive - boolean
-    @Test
-    public void getPetsAlive_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/isAlive/true");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-
-    // positive get all pets
-    @Test
-    public void getAllPets_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/getPets");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-    // negative filter get all pets that are alive - boolean
-    @Test
-    public void getPetsAliveNotExist_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/isAlive/false");
-
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-    // positive get pet by id
-    @Test
-    public void getPetById_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/1");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-
-    @Test
-    public void getPetsNotAlive_whenNoPetsNotAlive_thenResponseCodeNotFound() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/isAlive/false");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-    }
-
-    // positive get pets by name
-    @Test
-    public void getPetsByName_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/name/Max");
-
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-    }
-    // negative get pets by name
-    @Test
-    public void getPetByNameNotExisting_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + "/name/dug");
-
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-    }
-
     // admin updating pets
     @Test
     public void updatePet_whenAdminUser_thenResponseCodeSuccess() throws IOException {
@@ -282,11 +195,101 @@ public class PetControllerTest {
         assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
     }
 
+    // negative get all pets when pets exist - has to fail if there are data entry
+    @Test
+    public void getAllPets_whenNoPetsExist_thenResponseCodeNotFound() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/getPets");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
+    }
+
+
+    // negative get pet by id
+    @Test
+    public void givenWrongId_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/100");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
+    }
+    // positive checks if pet exists
+    @Test
+    public void checkPetExist_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/exists/1");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+    // negative checks if pet exists
+    @Test
+    public void checkPetNotExist_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/exists/100");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
+    }
+    // positive filter get all pets that are alive - boolean
+    @Test
+    public void getPetsAlive_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/isAlive/true");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+
+    // positive get all pets
+    @Test
+    public void getAllPets_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/getPets");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+    // negative filter get all pets that are alive - boolean
+    @Test
+    public void getPetsAliveNotExist_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/isAlive/false");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
+    }
+    // positive get pet by id
+    @Test
+    @Order(1)
+    public void getPetById_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/6");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void getPetsNotAlive_whenInvalidInput_thenResponseCodeBadRequest() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/isAlive/true");
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+
+    // positive get pets by name
+    @Test
+    public void getPetsByName_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/name/Max");
+
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+    // negative get pets by name
+    @Test
+    public void getPetByNameNotExisting_whenCorrectRequest_thenResponseCodeNotFound() throws IOException {
+        HttpGet request = new HttpGet(BASE_URL + "/name/dug");
+
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+
+        assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
+    }
+
+
+
 
     // positive delete Pet by Id
     @Test
+    @Order(21)
     public void deletePetByIExisting_whenCorrectRequest_thenResponseCodeSucess() throws IOException {
-        HttpDelete request = new HttpDelete(BASE_URL + "/deletePet/3");
+        HttpDelete request = new HttpDelete(BASE_URL + "/deletePet/5");
 
         // Add basic authentication header
         String auth = "Basic " + Base64.getEncoder().encodeToString(("admin:1234").getBytes());
@@ -297,9 +300,11 @@ public class PetControllerTest {
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
     }
     // positive delete Pet by Id
+
     @Test
+    @Order(20)
     public void deletePetByIExisting_whenCorrectRequest_thenResponseCodeUnauthorized() throws IOException {
-        HttpDelete request = new HttpDelete(BASE_URL + "/deletePet/3");
+        HttpDelete request = new HttpDelete(BASE_URL + "/deletePet/8");
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         assertEquals(HttpStatus.SC_UNAUTHORIZED, httpResponse.getStatusLine().getStatusCode());
     }
@@ -321,8 +326,9 @@ public class PetControllerTest {
 
     // Positive test case
     @Test
+    @Order(10)
     public void deletePetsByDate_whenPetsExist_thenResponseCodeSuccess() throws IOException {
-        HttpDelete request = new HttpDelete(BASE_URL + "/deletePetsByDate/2022-12-31");
+        HttpDelete request = new HttpDelete(BASE_URL + "/deletePetsByDate/2023-01-17");
 
         // Add basic authentication header
         String auth = "Basic " + Base64.getEncoder().encodeToString(("admin:1234").getBytes());
@@ -357,6 +363,7 @@ public class PetControllerTest {
 
     // delete all Pets
     @Test
+    @Order(11)
     public void deleteallPets_whenCorrectRequest_thenResponseCodeSuccess() throws IOException {
         HttpDelete request = new HttpDelete(BASE_URL + "/deletePets");
 

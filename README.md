@@ -7,8 +7,31 @@
 
 ![img_1.png](img_1.png)
 ![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+## Before running Tests please run the following commands im MySQL:
 
-- **Screenshots of Tests**: Include screenshots of your test executions here.
+```sql
+drop database if exists lbm295;
+create database lbm295;
+use lbm295;
+
+INSERT INTO `lbm295`.`pet` (`alive`, `birthday`, `breed`, `legs`, `name`, `weight`)
+VALUES (1, '2021-1-17', 'Text', 4, 'Maxi', 20);
+
+INSERT INTO `lbm295`.`pet` (`alive`, `birthday`, `breed`, `legs`, `name`, `weight`)
+VALUES (0, '2023-1-17', 'Text', 4, 'Max', 20);
+
+INSERT INTO `lbm295`.`pet` (`alive`, `birthday`, `breed`, `legs`, `name`, `weight`)
+VALUES (0, '2019-1-17', 'Text', 4, 'Paul', 20);
+
+INSERT INTO `lbm295`.`pet` (`alive`, `birthday`, `breed`, `legs`, `name`, `weight`)
+VALUES (0, '2022-1-17', 'Text', 4, 'loro', 20);
+
+INSERT INTO `lbm295`.`pet` (`alive`, `birthday`, `breed`, `legs`, `name`, `weight`)
+VALUES (1, '2019-1-17', 'dog', 4, 'NomNom', 20);
+```
+
+
 
 ## Validation Rules
 
@@ -25,7 +48,12 @@ Für die Erstellung eines neuen Haustiers gelten folgende Validierungsregeln:
 - **email**: Die E-Mail des Besitzers ist erforderlich und muss ein gültiges E-Mail-Format haben.
 
 ## Permission Matrix
-Describe the different roles and their permissions in your project here.
+| HTTP Method | URL | Roles |
+|-------------|-----|-------|
+| GET | /api/pets | USER, ADMIN |
+| POST | /api/pets | ADMIN |
+| PUT | /api/pets/{id} | ADMIN |
+| DELETE | /api/pets/{id} | ADMIN |
 
 ## OpenAPI Documentation
 ```yaml

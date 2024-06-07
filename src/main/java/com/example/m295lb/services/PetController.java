@@ -53,7 +53,7 @@ public class PetController {
     @Path("/{id}")
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("id") int id) {
+    public Response getId(@PathParam("id") int id) {
         log.info("getById");
         var pet = petRepository.findById(id);
         if (pet.isEmpty()) {
@@ -69,6 +69,7 @@ public class PetController {
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     public Response existsById(@PathParam("id") int id) throws ResourceNotFoundException {
+        log.info("check if pet exists");
         var pet = petRepository.findById(id);
         if (pet.isEmpty()) {
             throw new ResourceNotFoundException("Pet not found by id");
@@ -83,6 +84,7 @@ public class PetController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPetsByIsAlive(@PathParam("isAlive") boolean isAlive) {
         List<Pet> pets = petRepository.findPetByAlive(isAlive);
+        log.info("getPetsByIsAlive");
         if (pets.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No pets found that are " + (isAlive ? "alive" : "not alive")).build();
         }
@@ -104,13 +106,14 @@ public class PetController {
 
     // create new pet
     @POST
-    @Path("/postPets")
+    @Path("/postPet")
     @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addPet(@Valid Pet pet) throws InternalServerErrorException {
         Pet savedPet = petRepository.save(pet);
         if (savedPet == null) {
+            log.error("Pet not created");
             throw new InternalServerErrorException("Pet not created");
         }
         return Response.status(Response.Status.CREATED).entity(savedPet).build();
@@ -121,11 +124,12 @@ public class PetController {
     @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPets(@Valid List<Pet> pets) throws InternalServerErrorException {
+    public Response addPetsBulk(@Valid List<Pet> pets) throws InternalServerErrorException {
         List<Pet> savedPets = new ArrayList<>();
         for (Pet pet : pets) {
             Pet savedPet = petRepository.save(pet);
             if (savedPet == null) {
+                log.error("Pet not created");
                 throw new InternalServerErrorException("Pet not created");
             }
             savedPets.add(savedPet);
@@ -142,11 +146,13 @@ public class PetController {
     public Response updatePet(@PathParam("id") int id, @Valid Pet updatedPet) throws ResourceNotFoundException, InternalServerErrorException {
         var pet = petRepository.findById(id);
         if (pet.isEmpty()) {
+            log.error("Pet not found by id");
             throw new ResourceNotFoundException("Pet not found by id");
         }
         updatedPet.setPetID(id);
         Pet savedPet = petRepository.save(updatedPet);
         if (savedPet == null) {
+            log.error("Pet not updated");
             throw new InternalServerErrorException("Pet not updated");
         }
         return Response.ok().entity("Updated pet " + id).build();
@@ -193,7 +199,6 @@ public class PetController {
     public Response deletePetsByDate(@PathParam("date") String dateStr) {
         // Create a DateTimeFormatter with your desired format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-dd");
-
         try {
             LocalDate date = LocalDate.parse(dateStr, formatter);
 

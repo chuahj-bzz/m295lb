@@ -1,10 +1,8 @@
-package com.example.m295lb.repositorys;
+package com.example.m295lb.repositories;
 
 import com.example.m295lb.models.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface IOwnerRepository extends JpaRepository<Owner, Integer> {
